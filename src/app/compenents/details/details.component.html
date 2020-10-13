@@ -1,3 +1,32 @@
 <h2>{{firstName}}</h2>
 <h2>{{lastName}}</h2>
 <a routerLink="/user" >Retours à la liste</a>
+
+
+<!-- main app container -->
+<div class="card text-center m-3">
+    <h3 class="card-header">Details Of User </h3>
+    <div class="card-body">
+        <div *ngFor="let item of users | paginate: {
+          id: 'user-pagination',
+          itemsPerPage: itemByPage,
+          currentPage: page,
+          totalItems: totalRecords}">
+          {{item.firstName}} --  {{item.lastName}}
+        </div>
+        <pagination-controls id="user-pagination" 
+                             maxSize="9" 
+                             responsive="true"
+                             directionLinks="true" 
+                             (pageChange)="page = $event"
+                             (pageBoundsCorrection)="page = $event">
+        </pagination-controls>
+    </div>
+    <div class="card-footer pb-0 pt-3"> 
+        <select class="custom-select custom-select-sm" (click)="calculateSizePage($event)">
+                <option selected>select page size</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+      </select>
+    </div>
+</div>

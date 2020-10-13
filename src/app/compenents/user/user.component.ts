@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
-import {UserService} from '../../services/user.service'
+import {UserService} from '../../services/user.service';
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-user',
@@ -11,19 +12,25 @@ import {UserService} from '../../services/user.service'
 export class UserComponent implements OnInit {
 
   constructor(private userService: UserService, private _router: Router, private route: ActivatedRoute) { }
-  counter: number = this.userService.users.length;
+  counter: number = this.userService.getUsers.length;
   title: String;
-  users: any[];
+  users: User[];
   searchText: String = '';
   showForm: boolean;
   isEditForm: boolean;
   userData = {id: 0,firstName: '',lastName: ''};
 
   ngOnInit(): void {
-    this.users = this.userService.users;
+    this.getUsers();
   }
 
-  onSubmit(data) {
+  getUsers(): void {
+    this.userService.getUsers()
+    .subscribe(data => this.users = data);
+
+  }
+
+  onSubmit2(data) {
     // réinitialiser le formulaire
     this.userData = {id: 0,firstName: '',lastName: ''};
     if(!this.userService.isExist(data.id)){
@@ -41,9 +48,31 @@ export class UserComponent implements OnInit {
     }
   }
 
+  onSubmit(userData) {
+    if(!this.userService.isExist(userData.id)){
+    this.userService.createUser(userData).subscribe(
+      data =>{
+        alert('User created successfully.');
+        this.getUsers();
+      }
+    );
+    }else{
+      this.userService.updateUser(userData).subscribe();
+    }
+    this.showForm = false;
+
+  }
+
+
+
+
+
   deleteUser(id: number){
-    this.userService.deleteUser(id);
-    this._router.navigate(['/delete',id]) 
+    /*this.userService.deleteUser(id);
+    this._router.navigate(['/delete',id]) */
+    //this.users = this.users.filter(u => u !== user);
+    this.userService.deleteUser(id).
+    subscribe(() =>{this.users = this.users.filter(u => u.id !== id)});
   }
 
   formAddUser() :void{
@@ -57,14 +86,10 @@ export class UserComponent implements OnInit {
     // réinitialiser le formulaire
     this.userData = {id: 0,firstName: '',lastName: ''};
   }
-
-  persisteUser(){
-     
-  }
-
-  updateUser(user){
+ 
+  /*updateUser(user){
     this.userService.updateUser(user);
-  }
+  }*/
   
   updateForm(user){
     this.isEditForm=true;

@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import {FilterPipe} from './filter.pipe'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { AnimationComponent } from './compenents/animation/animation.component'
+import {NgxPaginationModule} from 'ngx-pagination';
+
 
 @NgModule({
   declarations: [
@@ -27,9 +29,13 @@ import { AnimationComponent } from './compenents/animation/animation.component'
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxPaginationModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+
+  ],
+  bootstrap: [AppComponent],
 })
+
 export class AppModule { }

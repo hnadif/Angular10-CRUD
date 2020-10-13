@@ -1,0 +1,8 @@
+.logo {
+    animation-name: example;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+  @keyframes example{
+      0%   {color: green;font-weight: bold;font-size: 1px;}
+  }
